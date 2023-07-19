@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "package": "de.dafuqs.revelationary.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "de.dafuqs.revelationary.mixin.Plugin",
+  "refmap": "eventhorizon.refmap.json",
+  "minVersion": "0.8",
+  "mixins": [
+    "AbstractBlockMixin",
+    "BlockUnbreakingMixin",
+    "CriteriaAccessor",
+    "MixinCommandManager",
+    "MixinPlayerManager",
+    "PlayerAdvancementTrackerMixin"
+  ],
+  "client": [
+    "client.AccessorClientAdvancementManager",
+    "client.BlockClientMixin",
+    "client.BlockModelsMixin",
+    "client.ClientAdvancementManagerMixin",
+    "client.ItemMixin",
+    "client.ItemModelsMixin",
+    "client.MinecraftClientMixin",
+    "client.WorldRendererMixin",
+    "client.WorldRendererMixinAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

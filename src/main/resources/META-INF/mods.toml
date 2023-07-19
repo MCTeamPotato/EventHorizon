@@ -1,0 +1,12 @@
+modLoader = "javafml"
+loaderVersion = "[43,)"
+license = "LGPL-v3"
+
+[[mods]]
+modId = "eventhorizon"
+version = "${version}"
+displayName = "Revelationary"
+author = "TeamPotato"
+description = '''
+Data Driven Block and Item Revelation system. Discover as you go!
+'''
