@@ -9,7 +9,6 @@
     "AbstractBlockMixin",
     "BlockUnbreakingMixin",
     "CriteriaAccessor",
-    "MixinCommandManager",
     "MixinPlayerManager",
     "PlayerAdvancementTrackerMixin"
   ],

@@ -26,5 +26,4 @@ public class AdvancementCriteria {
 		ADVANCEMENT_COUNT = CriteriaAccessor.callRegister(new AdvancementCountCriterion());
 		HAD_REVELATION = CriteriaAccessor.callRegister(new HadRevelationCriterion());
 	}
-	
 }

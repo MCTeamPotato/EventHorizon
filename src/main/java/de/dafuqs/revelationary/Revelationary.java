@@ -4,6 +4,7 @@ import de.dafuqs.revelationary.api.advancements.AdvancementCriteria;
 import de.dafuqs.revelationary.networking.RevelationaryS2CPacketReceivers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 public class Revelationary {
 
     public Revelationary() {
+        AdvancementCriteria.register();
         MinecraftForge.EVENT_BUS.register(this);
         if (FMLLoader.getDist().isClient()) {
             RevelationaryS2CPacketReceivers.register();
@@ -40,7 +42,6 @@ public class Revelationary {
     @SubscribeEvent
     public void onInitialize(FMLCommonSetupEvent event) {
         logInfo("Starting Common Startup");
-        AdvancementCriteria.register();
         if (FMLLoader.getLoadingModList().getModFileById("rubidium") != null) {
             logWarning("Rubidium detected. Chunk rebuilding will be done in cursed mode.");
         }
@@ -56,5 +57,10 @@ public class Revelationary {
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
         RevelationRegistry.addRevelationAwares();
+    }
+
+    @SubscribeEvent
+    public void onCmdRegister(RegisterCommandsEvent event) {
+        Commands.register(event.getDispatcher());
     }
 }
