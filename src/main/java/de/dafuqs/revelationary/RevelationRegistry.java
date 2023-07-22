@@ -16,8 +16,9 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Language;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "DataFlowIssue"})
 public class RevelationRegistry {
 	
 	private static final Map<Identifier, List<BlockState>> ADVANCEMENT_BLOCK_REGISTRY = new HashMap<>();
@@ -48,16 +49,16 @@ public class RevelationRegistry {
 		}
 		boolean isBlockItem = item instanceof BlockItem;
 		if(isBlockItem && !RevelationaryConfig.get().NameForUnrevealedBlocks.isEmpty()) {
-			return Text.translatable(RevelationaryConfig.get().NameForUnrevealedBlocks);
+			return new TranslatableText(RevelationaryConfig.get().NameForUnrevealedBlocks);
 		}
 		if(!isBlockItem && !RevelationaryConfig.get().NameForUnrevealedItems.isEmpty()) {
-			return Text.translatable(RevelationaryConfig.get().NameForUnrevealedItems);
+			return new TranslatableText(RevelationaryConfig.get().NameForUnrevealedItems);
 		}
 		if(RevelationaryConfig.get().UseTargetBlockOrItemNameInsteadOfScatter) {
-			return Text.translatable(ITEM_REGISTRY.get(item).getTranslationKey());
+			return new TranslatableText(ITEM_REGISTRY.get(item).getTranslationKey());
 		}
 		// Get the localized name of the item and scatter it using §k to make it unreadable
-		return Text.literal("§k" + Language.getInstance().get(item.getTranslationKey()));
+		return new LiteralText("§k" + Language.getInstance().get(item.getTranslationKey()));
 	}
 	
 	public static MutableText getTranslationString(Block block) {
@@ -65,13 +66,13 @@ public class RevelationRegistry {
 			return ALTERNATE_BLOCK_TRANSLATION_STRING_REGISTRY.get(block);
 		}
 		if(!RevelationaryConfig.get().NameForUnrevealedBlocks.isEmpty()) {
-			return Text.translatable(RevelationaryConfig.get().NameForUnrevealedBlocks);
+			return new TranslatableText(RevelationaryConfig.get().NameForUnrevealedBlocks);
 		}
 		if(RevelationaryConfig.get().UseTargetBlockOrItemNameInsteadOfScatter) {
 			return BLOCK_REGISTRY.get(block).getName();
 		}
 		// Get the localized name of the block and scatter it using §k to make it unreadable
-		return Text.literal("§k" + Language.getInstance().get(block.getTranslationKey()));
+		return new LiteralText("§k" + Language.getInstance().get(block.getTranslationKey()));
 	}
 	
 	public static void clear() {
@@ -117,8 +118,8 @@ public class RevelationRegistry {
 		if (jsonObject.has("block_states")) {
 			for (Map.Entry<String, JsonElement> stateEntry : jsonObject.get("block_states").getAsJsonObject().entrySet()) {
 				try {
-					BlockState sourceBlockState = BlockArgumentParser.block(Registry.BLOCK, new StringReader(stateEntry.getKey()), true).blockState();
-					BlockState targetBlockState = BlockArgumentParser.block(Registry.BLOCK, new StringReader(stateEntry.getValue().getAsString()), true).blockState();
+					BlockState sourceBlockState = new BlockArgumentParser(new StringReader(stateEntry.getKey()), false).parse(false).getBlockState();
+					BlockState targetBlockState = new BlockArgumentParser(new StringReader(stateEntry.getValue().getAsString()), false).parse(false).getBlockState();
 					
 					registerBlockState(advancementIdentifier, sourceBlockState, targetBlockState);
 				} catch (Exception e) {
@@ -140,7 +141,7 @@ public class RevelationRegistry {
 		if (jsonObject.has("block_name_replacements")) {
 			for (Map.Entry<String, JsonElement> blockNameEntry : jsonObject.get("block_name_replacements").getAsJsonObject().entrySet()) {
 				Identifier sourceId = Identifier.tryParse(blockNameEntry.getKey());
-				MutableText targetText = Text.translatable(blockNameEntry.getValue().getAsString());
+				MutableText targetText = new TranslatableText(blockNameEntry.getValue().getAsString());
 				
 				Block sourceBlock = Registry.BLOCK.get(sourceId);
 				ALTERNATE_BLOCK_TRANSLATION_STRING_REGISTRY.put(sourceBlock, targetText);
@@ -154,7 +155,7 @@ public class RevelationRegistry {
 		if (jsonObject.has("item_name_replacements")) {
 			for (Map.Entry<String, JsonElement> itemNameEntry : jsonObject.get("item_name_replacements").getAsJsonObject().entrySet()) {
 				Identifier sourceId = Identifier.tryParse(itemNameEntry.getKey());
-				MutableText targetText = Text.translatable(itemNameEntry.getValue().getAsString());
+				MutableText targetText = new TranslatableText(itemNameEntry.getValue().getAsString());
 				
 				Item sourceItem = Registry.ITEM.get(sourceId);
 				ALTERNATE_ITEM_TRANSLATION_STRING_REGISTRY.put(sourceItem, targetText);
@@ -202,6 +203,7 @@ public class RevelationRegistry {
 		return BLOCK_STATE_REGISTRY.containsKey(blockState);
 	}
 	
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean isVisibleTo(BlockState state, PlayerEntity player) {
 		return AdvancementHelper.hasAdvancement(player, BLOCK_ADVANCEMENT_REGISTRY.getOrDefault(state, null));
 	}
@@ -209,9 +211,9 @@ public class RevelationRegistry {
 	public static @NotNull Collection<BlockState> getRevealedBlockStates(Identifier advancement) {
 		List<BlockState> blockStates = new ArrayList<>();
 		if (ADVANCEMENT_BLOCK_REGISTRY.containsKey(advancement)) {
-			for (Object entry : ADVANCEMENT_BLOCK_REGISTRY.get(advancement)) {
-				if (entry instanceof BlockState blockState) {
-					blockStates.add(blockState);
+			for (BlockState entry : ADVANCEMENT_BLOCK_REGISTRY.get(advancement)) {
+				if (entry != null) {
+					blockStates.add(entry);
 				}
 			}
 		}
@@ -304,9 +306,9 @@ public class RevelationRegistry {
 	public static @NotNull Collection<Item> getRevealedItems(Identifier advancement) {
 		List<Item> items = new ArrayList<>();
 		if (ADVANCEMENT_ITEM_REGISTRY.containsKey(advancement)) {
-			for (Object entry : ADVANCEMENT_ITEM_REGISTRY.get(advancement)) {
-				if (entry instanceof Item item) {
-					items.add(item);
+			for (Item entry : ADVANCEMENT_ITEM_REGISTRY.get(advancement)) {
+				if (entry != null) {
+					items.add(entry);
 				}
 			}
 		}
@@ -370,8 +372,8 @@ public class RevelationRegistry {
 			Identifier advancementIdentifier = buf.readIdentifier();
 			int blockStateCount = buf.readInt();
 			for (int j = 0; j < blockStateCount; j++) {
-				BlockState sourceState = BlockArgumentParser.block(Registry.BLOCK, buf.readString(), true).blockState();
-				BlockState targetState = BlockArgumentParser.block(Registry.BLOCK, buf.readString(), true).blockState();
+				BlockState sourceState = new BlockArgumentParser(new StringReader(buf.readString()), true).parse(true).getBlockState();
+				BlockState targetState = new BlockArgumentParser(new StringReader(buf.readString()), true).parse(true).getBlockState();
 				
 				if (ADVANCEMENT_BLOCK_REGISTRY.containsKey(advancementIdentifier)) {
 					List<BlockState> advancementStates = ADVANCEMENT_BLOCK_REGISTRY.get(advancementIdentifier);

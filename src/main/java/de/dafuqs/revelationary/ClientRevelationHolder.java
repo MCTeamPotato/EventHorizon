@@ -53,14 +53,14 @@ public class ClientRevelationHolder {
 			}
 			
 			for (Block revealedBlock : revealedBlocks) {
-				if (revealedBlock instanceof RevelationAware revelationAware) {
-					revelationAware.onUncloak();
+				if (revealedBlock instanceof RevelationAware) {
+					((RevelationAware)revealedBlock).onUncloak();
 				}
 			}
 			for (Item revealedItem : revealedItems) {
 				activeItemSwaps.remove(revealedItem);
-				if (revealedItem instanceof RevelationAware revelationAware) {
-					revelationAware.onUncloak();
+				if (revealedItem instanceof RevelationAware) {
+					((RevelationAware)revealedItem).onUncloak();
 				}
 			}
 			
@@ -103,13 +103,13 @@ public class ClientRevelationHolder {
 			activeItemSwaps.addAll(concealedItems);
 			
 			for (Block concealedBlock : concealedBlocks) {
-				if (concealedBlock instanceof RevelationAware revelationAware) {
-					revelationAware.onCloak();
+				if (concealedBlock instanceof RevelationAware) {
+					((RevelationAware)concealedBlock).onCloak();
 				}
 			}
 			for (Item concealedItem : concealedItems) {
-				if (concealedItem instanceof RevelationAware revelationAware) {
-					revelationAware.onCloak();
+				if (concealedItem instanceof RevelationAware) {
+					((RevelationAware)concealedItem).onCloak();
 				}
 			}
 		}
@@ -124,8 +124,8 @@ public class ClientRevelationHolder {
 	// BLOCKS
 	private static void cloak(BlockState blockState) {
 		activeBlockStateSwaps.add(blockState);
-		if (blockState instanceof RevelationAware revelationAware) {
-			revelationAware.onCloak();
+		if (blockState instanceof RevelationAware) {
+			((RevelationAware)blockState).onCloak();
 		}
 	}
 	
@@ -148,8 +148,8 @@ public class ClientRevelationHolder {
 	// ITEMS
 	private static void cloak(Item item) {
 		activeItemSwaps.add(item);
-		if (item instanceof RevelationAware revelationAware) {
-			revelationAware.onCloak();
+		if (item instanceof RevelationAware) {
+			((RevelationAware)item).onCloak();
 		}
 	}
 	

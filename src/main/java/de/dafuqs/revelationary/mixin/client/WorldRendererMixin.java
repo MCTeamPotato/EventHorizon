@@ -55,20 +55,17 @@ public abstract class WorldRendererMixin implements WorldRendererAccessor {
 			return;
 		}
 		
-		WorldRendererMixinAccessor wra = (de.dafuqs.revelationary.mixin.client.WorldRendererMixinAccessor) worldRenderer;
+		WorldRendererMixinAccessor wra = (WorldRendererMixinAccessor) worldRenderer;
 		ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
 		if (clientPlayerEntity == null)  return;
-		ChunkPos chunkPos = clientPlayerEntity.getChunkPos();
-		int viewDistance = MinecraftClient.getInstance().options.getViewDistance().getValue();
-		
-		int startY = world.getBottomSectionCoord();
-		int endY = world.getTopSectionCoord();
+		ChunkPos chunkPos = clientPlayerEntity.world.getChunk(clientPlayerEntity.getBlockPos()).getPos();
+		int viewDistance = MinecraftClient.getInstance().options.viewDistance;
 		
 		for (int x = -viewDistance; x < viewDistance; x++) {
 			for (int z = -viewDistance; z < viewDistance; z++) {
 				WorldChunk chunk = MinecraftClient.getInstance().world.getChunkManager().getWorldChunk(chunkPos.x + x, chunkPos.z + z, false);
 				if (chunk != null) {
-					for (int y = startY; y <= endY; y++) {
+					for (int y = 0; y <= 256; y++) {
 						wra.invokeScheduleChunkRender(chunk.getPos().x, y, chunk.getPos().z, false);
 					}
 				}

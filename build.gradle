@@ -3,7 +3,7 @@ plugins {
     id "maven-publish"
 }
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -14,20 +14,9 @@ loom {
 
     forge {
         mixin.defaultRefmapName = "eventhorizon.refmap.json"
-        // specify the mixin configs used in this mod
-        // this will be added to the jar manifest as well!
         mixinConfigs = [
             "eventhorizon.mixins.json"
         ]
-
-        // missing access transformers?
-        // don't worry, you can still use them!
-        // note that your AT *MUST* be located at
-        // src/main/resources/META-INF/accesstransformer.cfg
-        // to work as there is currently no config option to change this.
-        // also, any names used in your access transformer will need to be
-        // in SRG mapped ("func_" / "field_" with MCP class names) to work!
-        // (both of these things may be subject to change in the future)
     }
 }
 
@@ -43,7 +32,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
-    modImplementation files("libs/papi-1.19.2-0.0.1.jar")
+    modImplementation files("libs/papi-1.16.5-1.0.0.jar")
 }
 
 processResources {
@@ -63,16 +52,13 @@ tasks.withType(JavaCompile) {
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     // If Javadoc is generated, this must be specified in that task too.
     options.encoding = "UTF-8"
-    options.release = 17
+    options.release = 8
 }
 
 jar {
     // add some additional metadata to the jar manifest
     manifest {
         attributes([
-                "Specification-Title"     : project.mod_id,
-                "Specification-Vendor"    : project.mod_author,
-                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : version,
                 "Implementation-Vendor"   : project.mod_author,

@@ -9,8 +9,9 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static de.dafuqs.revelationary.Revelationary.logError;
@@ -98,38 +99,34 @@ public class Commands {
         String utilNamespace = args.get("namespace").replace("*", "all");
         String utilPath = args.get("path").replace("*", "all");
         try {
-            switch (command) {
-                case "revoke" -> {
-                    int advCount = 0;
-                    for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
-                        advCount += AdvancementUtils.revokeAllAdvancements(player, utilNamespace, utilPath);
-                    }
-                    if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(Text.translatable("commands.revelationary.advancement.revoke", advCount, args.get("targets"), args.get("namespace"), args.get("path")), false);
-
+            if ("revoke".equals(command)) {
+                int advCount = 0;
+                for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
+                    advCount += AdvancementUtils.revokeAllAdvancements(player, utilNamespace, utilPath);
                 }
-                case "grant" -> {
-                    int advCount = 0;
-                    for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
-                        advCount += AdvancementUtils.grantAllAdvancements(player, utilNamespace, utilPath);
-                    }
-                    if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(Text.translatable("commands.revelationary.advancement.grant", advCount, args.get("targets"), args.get("namespace"), args.get("path")), false);
+                if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(new TranslatableText("commands.revelationary.advancement.revoke", advCount, args.get("targets"), args.get("namespace"), args.get("path")), false);
+            } else if ("grant".equals(command)) {
+                int advCount = 0;
+                for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
+                    advCount += AdvancementUtils.grantAllAdvancements(player, utilNamespace, utilPath);
                 }
-                case "sync" -> {
-                    int advCount = 0;
-                    for (ServerPlayerEntity targetPlayer : EntityArgumentType.getPlayers(context, "targets")) {
-                        try {
-                            advCount += AdvancementUtils.syncAdvancements(EntityArgumentType.getPlayer(context, "target"), targetPlayer, utilNamespace, utilPath, BoolArgumentType.getBool(context, "deleteOld"));
-                        } catch (Exception e) {
-                            advCount += AdvancementUtils.syncAdvancements(EntityArgumentType.getPlayer(context, "target"), targetPlayer, utilNamespace, utilPath, false);
-                        }
+                if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(new TranslatableText("commands.revelationary.advancement.grant", advCount, args.get("targets"), args.get("namespace"), args.get("path")), false);
+            } else if ("sync".equals(command)) {
+                int advCount = 0;
+                for (ServerPlayerEntity targetPlayer : EntityArgumentType.getPlayers(context, "targets")) {
+                    try {
+                        advCount += AdvancementUtils.syncAdvancements(EntityArgumentType.getPlayer(context, "target"), targetPlayer, utilNamespace, utilPath, BoolArgumentType.getBool(context, "deleteOld"));
+                    } catch (Exception e) {
+                        advCount += AdvancementUtils.syncAdvancements(EntityArgumentType.getPlayer(context, "target"), targetPlayer, utilNamespace, utilPath, false);
                     }
-                    if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(Text.translatable("commands.revelationary.advancement.sync", advCount, EntityArgumentType.getPlayer(context, "target").getDisplayName(), args.get("targets"), args.get("namespace"), args.get("path")), false);
                 }
+                if (context.getSource().getPlayer() != null) context.getSource().getPlayer().sendMessage(new TranslatableText("commands.revelationary.advancement.sync", advCount, EntityArgumentType.getPlayer(context, "target").getDisplayName(), args.get("targets"), args.get("namespace"), args.get("path")), false);
             }
         } catch (Exception e) {
             logError("Error while executing command: " + e);
         }
     }
+
 
     private static Map<String, String> getCommandArgMap(CommandContext<ServerCommandSource> context, String namespace, String path) {
         //the if statements could probably be compacted
@@ -150,12 +147,14 @@ public class Commands {
             } else {
                 path = "*";
             }
-            String targets = EntityArgumentType.getPlayers(context, "targets").stream().map(player -> player.getDisplayName().getString()).reduce((a, b) -> a + ", " + b).orElse("null");
-            return Map.of("targets", targets, "namespace", namespace, "path", path);
+            Map<String, String> stringMap = new LinkedHashMap<>();
+            stringMap.put("targets", EntityArgumentType.getPlayers(context, "targets").stream().map(player -> player.getDisplayName().getString()).reduce((a, b) -> a + ", " + b).orElse("null"));
+            stringMap.put("namespace", namespace);
+            stringMap.put("path", path);
+            return stringMap;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

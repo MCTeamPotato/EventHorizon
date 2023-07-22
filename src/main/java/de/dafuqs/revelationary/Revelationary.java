@@ -5,13 +5,13 @@ import de.dafuqs.revelationary.networking.RevelationaryS2CPacketReceivers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(Revelationary.MOD_ID)
 public class Revelationary {
@@ -25,7 +25,7 @@ public class Revelationary {
     }
 
     public static final String MOD_ID = "eventhorizon";
-    private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static void logInfo(String message) {
         LOGGER.info("[EventHorizon] " + message);
@@ -55,7 +55,7 @@ public class Revelationary {
     }
 
     @SubscribeEvent
-    public void onServerStarted(ServerStartedEvent event) {
+    public void onServerStarted(FMLServerStartedEvent event) {
         RevelationRegistry.addRevelationAwares();
     }
 

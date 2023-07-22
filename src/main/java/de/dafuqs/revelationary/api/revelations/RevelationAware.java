@@ -98,7 +98,7 @@ public interface RevelationAware {
 	 */
 	default boolean isVisibleTo(ShapeContext context) {
 		if (context instanceof EntityShapeContext) {
-			Entity entity = ((EntityShapeContext) context).getEntity();
+			Entity entity = context.getEntity();
 			if (entity instanceof PlayerEntity) {
 				return this.isVisibleTo((PlayerEntity) entity);
 			}

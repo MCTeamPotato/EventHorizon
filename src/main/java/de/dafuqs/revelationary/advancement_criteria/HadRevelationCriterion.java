@@ -32,11 +32,10 @@ public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCrite
 	}
 	
 	public void trigger(ServerPlayerEntity player, Block block) {
-		this.trigger(player, (conditions) -> {
-			return conditions.matches(block);
-		});
+		this.test(player, (conditions) -> conditions.matches(block));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static class Conditions extends AbstractCriterionConditions {
 		private final Identifier identifier;
 		
@@ -55,10 +54,10 @@ public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCrite
 			if (identifier.getPath().isEmpty()) {
 				// if "revelation_identifier": "" => trigger with any revelation
 				return true;
-			} else if (object instanceof Block cloakableBlock) {
-				return Registry.BLOCK.getId(cloakableBlock).equals(identifier);
-			} else if (object instanceof Item cloakableItem) {
-				return Registry.ITEM.getId(cloakableItem).equals(identifier);
+			} else if (object instanceof Block) {
+				return Registry.BLOCK.getId((Block)object).equals(identifier);
+			} else if (object instanceof Item) {
+				return Registry.ITEM.getId((Item)object).equals(identifier);
 			} else {
 				return false;
 			}

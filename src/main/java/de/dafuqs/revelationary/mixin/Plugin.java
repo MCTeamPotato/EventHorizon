@@ -1,5 +1,6 @@
 package de.dafuqs.revelationary.mixin;
 
+import com.google.common.collect.Lists;
 import de.dafuqs.revelationary.config.RevelationaryConfig;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -33,7 +34,7 @@ public final class Plugin implements IMixinConfigPlugin {
 	
 	@Override
 	public List<String> getMixins() {
-		return List.of();
+		return Lists.newArrayList();
 	}
 	
 	@Override

@@ -115,8 +115,8 @@ public class AdvancementUtils {
                 if (!hasAdvancement.isDone()) {
                     for (Map.Entry<String, AdvancementCriterion> criterionEntry : advancement.getCriteria().entrySet()) {
                         CriterionConditions conditions = criterionEntry.getValue().getConditions();
-                        if (conditions != null && conditions.getId().equals(AdvancementGottenCriterion.ID) && conditions instanceof AdvancementGottenCriterion.Conditions hasAdvancementConditions) {
-                            Identifier advancementIdentifier = hasAdvancementConditions.getAdvancementIdentifier();
+                        if (conditions != null && conditions.getId().equals(AdvancementGottenCriterion.ID) && conditions instanceof AdvancementGottenCriterion.Conditions) {
+                            Identifier advancementIdentifier = ((AdvancementGottenCriterion.Conditions)conditions).getAdvancementIdentifier();
                             Advancement advancementCriterionAdvancement = loader.get(advancementIdentifier);
                             if (advancementCriterionAdvancement != null) {
                                 AdvancementProgress hasAdvancementCriterionAdvancement = tracker.getProgress(advancementCriterionAdvancement);

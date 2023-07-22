@@ -28,6 +28,7 @@ public class RevelationaryConfig {
 
 		public Config() { }
 
+		@SuppressWarnings("ResultOfMethodCallIgnored")
 		private static Config load() {
 			if (!CONFIG_FILE_PATH.exists()) {
 				try {

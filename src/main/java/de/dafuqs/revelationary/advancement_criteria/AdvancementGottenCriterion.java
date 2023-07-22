@@ -34,7 +34,7 @@ public class AdvancementGottenCriterion extends AbstractCriterion<AdvancementGot
 	}
 	
 	public void trigger(ServerPlayerEntity player, Advancement advancement) {
-		this.trigger(player, (conditions) -> conditions.matches(advancement));
+		this.test(player, (conditions) -> conditions.matches(advancement));
 	}
 	
 	public static class Conditions extends AbstractCriterionConditions {

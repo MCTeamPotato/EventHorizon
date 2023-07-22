@@ -45,7 +45,7 @@ public class AdvancementCountCriterion extends AbstractCriterion<AdvancementCoun
 	}
 	
 	public void trigger(ServerPlayerEntity player) {
-		this.trigger(player, (conditions) -> conditions.matches(player));
+		this.test(player, (conditions) -> conditions.matches(player));
 	}
 	
 	public static class Conditions extends AbstractCriterionConditions {

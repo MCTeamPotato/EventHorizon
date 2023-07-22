@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "de.dafuqs.revelationary.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_8",
   "plugin": "de.dafuqs.revelationary.mixin.Plugin",
   "refmap": "eventhorizon.refmap.json",
   "minVersion": "0.8",

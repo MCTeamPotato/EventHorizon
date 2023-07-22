@@ -2,8 +2,6 @@ package de.dafuqs.revelationary.api.advancements;
 
 import de.dafuqs.revelationary.ClientAdvancements;
 import net.minecraft.util.Identifier;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Set;
 
@@ -12,8 +10,6 @@ import java.util.Set;
  * Instead of mixin into AdvancementS2CPacket directly this contains
  * simple full featured lists of advancements that were gotten and removed
  */
-
-@OnlyIn(Dist.CLIENT)
 public interface ClientAdvancementPacketCallback {
 	
 	/**
@@ -32,5 +28,4 @@ public interface ClientAdvancementPacketCallback {
 	static void registerCallback(ClientAdvancementPacketCallback callback) {
 		ClientAdvancements.callbacks.add(callback);
 	}
-	
 }

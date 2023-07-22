@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CloakedBlockItem extends BlockItem implements RevelationAware {
@@ -29,12 +30,13 @@ public class CloakedBlockItem extends BlockItem implements RevelationAware {
 	
 	@Override
 	public Map<BlockState, BlockState> getBlockStateCloaks() {
-		return Map.of(this.getBlock().getDefaultState(), this.cloakItem.getBlock().getDefaultState());
+		Map<BlockState, BlockState> stateMap = new LinkedHashMap<>();
+		stateMap.put(this.getBlock().getDefaultState(), this.cloakItem.getBlock().getDefaultState());
+		return stateMap;
 	}
 	
 	@Override
 	public Pair<Item, Item> getItemCloak() {
 		return new Pair<>(this, cloakItem);
 	}
-	
 }
