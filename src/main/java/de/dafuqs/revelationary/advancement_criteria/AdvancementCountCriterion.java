@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.dafuqs.revelationary.Revelationary;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.PlayerAdvancementTracker;
 import net.minecraft.advancement.criterion.AbstractCriterion;
@@ -15,15 +16,17 @@ import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.server.ServerAdvancementLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class AdvancementCountCriterion extends AbstractCriterion<AdvancementCountCriterion.Conditions> {
 	
 	public static final Identifier ID = new Identifier(Revelationary.MOD_ID, "advancement_count");
 	
-	public static AdvancementCountCriterion.Conditions create(Collection<Identifier> advancementIdentifiers, NumberRange.IntRange range) {
+	@Contract("_, _ -> new")
+	public static AdvancementCountCriterion.@NotNull Conditions create(Collection<Identifier> advancementIdentifiers, NumberRange.IntRange range) {
 		return new AdvancementCountCriterion.Conditions(EntityPredicate.Extended.EMPTY, advancementIdentifiers, range);
 	}
 	
@@ -35,8 +38,8 @@ public class AdvancementCountCriterion extends AbstractCriterion<AdvancementCoun
 		return new AdvancementCountCriterion.Conditions(extended, advancementIdentifiers, range);
 	}
 	
-	public AdvancementCountCriterion.Conditions conditionsFromJson(JsonObject jsonObject, EntityPredicate.Extended extended, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
-		Collection<Identifier> advancementIdentifiers = new ArrayList<>();
+	public AdvancementCountCriterion.Conditions conditionsFromJson(@NotNull JsonObject jsonObject, EntityPredicate.Extended extended, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
+		Collection<Identifier> advancementIdentifiers = new ObjectOpenHashSet<>();
 		for (JsonElement jsonElement : jsonObject.getAsJsonArray("advancement_identifiers")) {
 			advancementIdentifiers.add(Identifier.tryParse(jsonElement.getAsString()));
 		}
@@ -69,7 +72,7 @@ public class AdvancementCountCriterion extends AbstractCriterion<AdvancementCoun
 			return jsonObject;
 		}
 		
-		public boolean matches(ServerPlayerEntity serverPlayerEntity) {
+		public boolean matches(@NotNull ServerPlayerEntity serverPlayerEntity) {
 			ServerAdvancementLoader loader = serverPlayerEntity.server.getAdvancementLoader();
 			if(loader == null) {
 				return false;

@@ -1,5 +1,6 @@
 package de.dafuqs.revelationary.mixin.client;
 
+import de.dafuqs.revelationary.Revelationary;
 import de.dafuqs.revelationary.api.revelations.WorldRendererAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -9,7 +10,6 @@ import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
-import net.minecraftforge.fml.loading.FMLLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -28,7 +28,7 @@ public abstract class WorldRendererMixin implements WorldRendererAccessor {
 	 * Warning: Costly + LagSpike!
 	 */
 	public void revelationary$rebuildAllChunks() {
-		if (FMLLoader.getLoadingModList().getModFileById("rubidium") != null) {
+		if (Revelationary.isRubidiumLoaded) {
 			revelationary$rebuildAllChunksSodium();
 			return;
 		}

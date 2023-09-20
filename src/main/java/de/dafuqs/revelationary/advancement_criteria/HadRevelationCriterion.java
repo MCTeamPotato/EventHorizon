@@ -12,13 +12,18 @@ import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCriterion.Conditions> {
 	
 	public static final Identifier ID = new Identifier(Revelationary.MOD_ID, "had_revelation");
 	
-	public static HadRevelationCriterion.Conditions create(Identifier id) {
+	@Contract("_ -> new")
+	public static HadRevelationCriterion.@NotNull Conditions create(Identifier id) {
 		return new HadRevelationCriterion.Conditions(EntityPredicate.Extended.EMPTY, id);
 	}
 	
@@ -56,13 +61,12 @@ public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCrite
 				// if "revelation_identifier": "" => trigger with any revelation
 				return true;
 			} else if (object instanceof Block cloakableBlock) {
-				return Registry.BLOCK.getId(cloakableBlock).equals(identifier);
+				return Objects.equals(ForgeRegistries.BLOCKS.getKey(cloakableBlock), identifier);
 			} else if (object instanceof Item cloakableItem) {
-				return Registry.ITEM.getId(cloakableItem).equals(identifier);
+				return Objects.equals(ForgeRegistries.ITEMS.getKey(cloakableItem), identifier);
 			} else {
 				return false;
 			}
 		}
 	}
-	
 }

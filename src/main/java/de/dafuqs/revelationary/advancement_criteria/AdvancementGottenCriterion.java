@@ -11,12 +11,15 @@ import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class AdvancementGottenCriterion extends AbstractCriterion<AdvancementGottenCriterion.Conditions> {
 	
 	public static final Identifier ID = new Identifier(Revelationary.MOD_ID, "advancement_gotten");
 	
-	public static AdvancementGottenCriterion.Conditions create(Identifier id) {
+	@Contract("_ -> new")
+	public static AdvancementGottenCriterion.@NotNull Conditions create(Identifier id) {
 		return new AdvancementGottenCriterion.Conditions(EntityPredicate.Extended.EMPTY, id);
 	}
 	
@@ -51,7 +54,7 @@ public class AdvancementGottenCriterion extends AbstractCriterion<AdvancementGot
 			return jsonObject;
 		}
 		
-		public boolean matches(Advancement advancement) {
+		public boolean matches(@NotNull Advancement advancement) {
 			return this.advancementIdentifier.equals(advancement.getId());
 		}
 		

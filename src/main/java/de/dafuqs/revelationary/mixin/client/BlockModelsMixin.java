@@ -31,7 +31,7 @@ public class BlockModelsMixin {
 			BlockState destinationBlockState = ClientRevelationHolder.getCloakTarget(blockState);
 			BakedModel overriddenModel = this.models.getOrDefault(destinationBlockState, modelManager.getMissingModel());
 			callbackInfoReturnable.setReturnValue(overriddenModel);
+			callbackInfoReturnable.cancel();
 		}
 	}
-	
 }

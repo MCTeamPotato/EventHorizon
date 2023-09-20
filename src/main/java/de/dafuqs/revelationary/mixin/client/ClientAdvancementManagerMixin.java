@@ -23,5 +23,4 @@ public abstract class ClientAdvancementManagerMixin {
 	public void onAdvancementSync(AdvancementUpdateS2CPacket packet, CallbackInfo info) {
 		ClientAdvancements.onClientPacket(packet);
 	}
-	
 }

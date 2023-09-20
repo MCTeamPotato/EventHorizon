@@ -17,6 +17,7 @@ public class BlockClientMixin {
 		Block thisBlock = (Block) (Object) this;
 		if (ClientRevelationHolder.isCloaked(thisBlock)) {
 			callbackInfoReturnable.setReturnValue(RevelationRegistry.getTranslationString(thisBlock));
+			callbackInfoReturnable.cancel();
 		}
 	}
 }

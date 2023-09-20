@@ -10,6 +10,9 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
 
@@ -18,7 +21,7 @@ import static de.dafuqs.revelationary.Revelationary.logError;
 public class Commands {
 
     //register the main commands
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(@NotNull CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("revelationary")
                 .requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.literal("advancement")
@@ -131,7 +134,7 @@ public class Commands {
         }
     }
 
-    private static Map<String, String> getCommandArgMap(CommandContext<ServerCommandSource> context, String namespace, String path) {
+    private static @Nullable @Unmodifiable Map<String, String> getCommandArgMap(CommandContext<ServerCommandSource> context, String namespace, String path) {
         //the if statements could probably be compacted
         try {
             if (namespace != null) {
@@ -157,5 +160,4 @@ public class Commands {
         }
         return null;
     }
-
 }

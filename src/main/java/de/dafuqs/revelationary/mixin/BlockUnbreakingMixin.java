@@ -24,5 +24,4 @@ public abstract class BlockUnbreakingMixin {
 			cir.setReturnValue(0F);
 		}
 	}
-	
 }

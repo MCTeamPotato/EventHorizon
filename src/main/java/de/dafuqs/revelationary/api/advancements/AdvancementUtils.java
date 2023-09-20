@@ -9,12 +9,13 @@ import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.server.ServerAdvancementLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class AdvancementUtils {
 
-    public static int revokeAllAdvancements(ServerPlayerEntity player, String namespace , String path) {
+    public static int revokeAllAdvancements(@NotNull ServerPlayerEntity player, String namespace , String path) {
         int advCount = 0;
         if (player.getServer() == null) {
             return 0;
@@ -35,7 +36,7 @@ public class AdvancementUtils {
         return advCount;
     }
 
-    public static int grantAllAdvancements(ServerPlayerEntity player, String namespace , String path) {
+    public static int grantAllAdvancements(@NotNull ServerPlayerEntity player, String namespace , String path) {
         int advCount = 0;
         if (player.getServer() == null) {
             return 0;
@@ -56,7 +57,7 @@ public class AdvancementUtils {
         return advCount;
     }
 
-    public static int syncAdvancements(ServerPlayerEntity player1, ServerPlayerEntity player2, String namespace, String path, Boolean deleteOld) {
+    public static int syncAdvancements(@NotNull ServerPlayerEntity player1, ServerPlayerEntity player2, String namespace, String path, Boolean deleteOld) {
         int advCount = 0;
         if (player1.getServer() == null || player2.getServer() == null) {
             return 0;
@@ -102,7 +103,7 @@ public class AdvancementUtils {
      * @param serverPlayerEntity The player to reprocess unlocks
      * @param namespace the namespace to reprocess. Usually will match your mod id
      */
-    public static void reprocessAdvancementUnlocks(ServerPlayerEntity serverPlayerEntity, String namespace) {
+    public static void reprocessAdvancementUnlocks(@NotNull ServerPlayerEntity serverPlayerEntity, String namespace) {
         if (serverPlayerEntity.getServer() == null) {
             return;
         }

@@ -14,6 +14,7 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -123,7 +124,7 @@ public interface RevelationAware {
 	 * @return the player of that loot context builder. null if there is no player in that context
 	 */
 	@Nullable
-	static PlayerEntity getLootPlayerEntity(LootContext.Builder lootContextBuilder) {
+	static PlayerEntity getLootPlayerEntity(LootContext.@NotNull Builder lootContextBuilder) {
 		if (lootContextBuilder.getNullable(LootContextParameters.THIS_ENTITY) == null) {
 			return null;
 		} else {

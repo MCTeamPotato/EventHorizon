@@ -6,8 +6,6 @@ import net.minecraft.advancement.Advancement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AdvancementHelper {
 	
@@ -53,9 +51,7 @@ public class AdvancementHelper {
 	 * @param advancementIdentifier the identifier of the advancement to check
 	 * @return if the client player has the advancement
 	 */
-	@OnlyIn(Dist.CLIENT)
 	public static boolean hasAdvancementClient(Identifier advancementIdentifier) {
 		return ClientAdvancements.hasDone(advancementIdentifier);
 	}
-	
 }
