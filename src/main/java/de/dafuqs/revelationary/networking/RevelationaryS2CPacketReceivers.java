@@ -3,7 +3,7 @@ package de.dafuqs.revelationary.networking;
 import de.dafuqs.revelationary.ClientRevelationHolder;
 import de.dafuqs.revelationary.RevelationRegistry;
 import de.dafuqs.revelationary.Revelationary;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.networking.api.client.networking.v1.ClientPlayNetworking;
 
 public class RevelationaryS2CPacketReceivers {
 	public static void register() {

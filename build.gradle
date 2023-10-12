@@ -20,13 +20,15 @@ loom {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
-    modImplementation files("libs/papi-1.19.2-1.1.0.jar")
+    modImplementation 'com.github.MCTeamPotato:FabricNetworkingAPIReforged:1192-0.0.1'
+    include 'com.github.MCTeamPotato:FabricNetworkingAPIReforged:1192-0.0.1'
 }
 
 processResources {
