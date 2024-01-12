@@ -9,6 +9,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,9 +30,7 @@ public class Revelationary {
     public Revelationary() {
         AdvancementCriteria.register();
         MinecraftForge.EVENT_BUS.register(this);
-        if (FMLLoader.getDist().isClient()) {
-            RevelationaryS2CPacketReceivers.register();
-        }
+        RevelationaryS2CPacketReceivers.register();
     }
 
     public static void logInfo(String message) {
@@ -71,7 +70,7 @@ public class Revelationary {
         Commands.register(event.getDispatcher());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onPlayerLogIn(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayerEntity serverPlayerEntity) RevelationaryS2CPacketSenders.sendRevelations(serverPlayerEntity);
     }
