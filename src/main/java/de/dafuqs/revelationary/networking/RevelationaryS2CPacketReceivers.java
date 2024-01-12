@@ -8,9 +8,9 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.event.EventNetworkChannel;
 
 public class RevelationaryS2CPacketReceivers {
-	public static final String VERSION = "1.0";
+	private static final String VERSION = "1.0";
 
-	public static final EventNetworkChannel REVELATION_SYNC_CHANNEL = NetworkRegistry.newEventChannel(RevelationaryPackets.REVELATION_SYNC, () -> VERSION, c -> true, c -> true);
+	private static final EventNetworkChannel REVELATION_SYNC_CHANNEL = NetworkRegistry.newEventChannel(RevelationaryPackets.REVELATION_SYNC, () -> VERSION, c -> true, c -> true);
 
 	public static void register() {
 		REVELATION_SYNC_CHANNEL.addListener(networkEvent -> {
