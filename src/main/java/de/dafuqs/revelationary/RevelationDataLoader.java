@@ -20,8 +20,6 @@ public class RevelationDataLoader extends JsonDataLoader implements ResourceRelo
 	
 	@Override
 	protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
-		prepared.forEach((identifier, jsonElement) -> {
-			RevelationRegistry.registerFromJson(jsonElement.getAsJsonObject());
-		});
+		prepared.forEach((identifier, jsonElement) -> RevelationRegistry.registerFromJson(jsonElement.getAsJsonObject()));
 	}
 }
