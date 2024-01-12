@@ -1,6 +1,10 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.darkhax.curseforgegradle.UploadArtifact
+
 plugins {
-    id "dev.architectury.loom" version "1.1-SNAPSHOT"
-    id "maven-publish"
+    id "dev.architectury.loom" version "1.4-SNAPSHOT"
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.+'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
@@ -21,42 +25,52 @@ loom {
 }
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    maven { url 'https://jitpack.io' }
+    maven {
+        name 'ParchmentMC'
+        url 'https://maven.parchmentmc.org'
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
-    modImplementation files("libs/papi-1.16.5-1.0.2.jar")
+    modImplementation("maven.modrinth:potacore:0.1.1")
+    modImplementation("maven.modrinth:potacore:0.1.1:universal-sources")
+    modImplementation("maven.modrinth:potacore:0.1.1:universal-javadoc")
 }
 
 processResources {
-    // define properties that can be used during resource processing
     inputs.property "version", project.version
-
-    // this will replace the property "${version}" in your mods.toml
-    // with the version you've defined in your gradle.properties
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
     }
 }
 
 tasks.withType(JavaCompile) {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     options.encoding = "UTF-8"
     options.release = 8
 }
 
+java {
+    withSourcesJar()
+}
+
 jar {
-    // add some additional metadata to the jar manifest
     manifest {
         attributes([
                 "Implementation-Title"    : project.name,
@@ -67,19 +81,35 @@ jar {
     }
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
+String[] supportedGameVersions = new String[]{"${minecraft_version}"}
+String currentChangeLog = file("CHANGELOG.md").getText("UTF-8");
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "${archives_base_name}"
+    versionNumber = "${mod_version}"
+    uploadFile = remapJar
+    gameVersions.addAll(supportedGameVersions)
+    loaders = ["forge"]
+    versionType = "release"
+    additionalFiles = [sourcesJar]
+    changelog.set(currentChangeLog)
+}
+
+tasks.register("publishCurseForge", TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_TOKEN")
+    disableVersionDetection()
+
+    UploadArtifact mainFile = upload(cf_project_id, remapJar)
+    mainFile.displayName = "${archives_base_name}-${version}"
+    mainFile.releaseType = "release"
+    mainFile.changelog = currentChangeLog
+    mainFile.changelogType = "markdown"
+    mainFile.addModLoader("Forge")
+    mainFile.addJavaVersion("Java 17", "Java 8")
+    mainFile.addGameVersion(supportedGameVersions)
+
+    UploadArtifact sourcesFile = mainFile.withAdditionalFile(sourcesJar)
+    sourcesFile.changelog = currentChangeLog
+    sourcesFile.changelogType = "markdown"
 }

@@ -153,7 +153,7 @@ public class Commands {
             stringMap.put("path", path);
             return stringMap;
         } catch (Exception e) {
-            e.printStackTrace();
+            Revelationary.logError(e.toString());
         }
         return null;
     }
