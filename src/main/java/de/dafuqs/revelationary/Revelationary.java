@@ -19,9 +19,7 @@ public class Revelationary {
     public Revelationary() {
         AdvancementCriteria.register();
         MinecraftForge.EVENT_BUS.register(this);
-        if (FMLLoader.getDist().isClient()) {
-            RevelationaryS2CPacketReceivers.register();
-        }
+        RevelationaryS2CPacketReceivers.register();
     }
 
     public static final String MOD_ID = "eventhorizon";
