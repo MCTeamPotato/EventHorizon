@@ -84,18 +84,6 @@ jar {
 String[] supportedGameVersions = new String[]{"${minecraft_version}"}
 String currentChangeLog = file("CHANGELOG.md").getText("UTF-8");
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "${archives_base_name}"
-    versionNumber = "${mod_version}"
-    uploadFile = remapJar
-    gameVersions.addAll(supportedGameVersions)
-    loaders = ["forge"]
-    versionType = "release"
-    additionalFiles = [sourcesJar]
-    changelog.set(currentChangeLog)
-}
-
 tasks.register("publishCurseForge", TaskPublishCurseForge) {
     apiToken = System.getenv("CURSEFORGE_TOKEN")
     disableVersionDetection()
