@@ -37,9 +37,7 @@ public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCrite
 	}
 	
 	public void trigger(ServerPlayerEntity player, Block block) {
-		this.trigger(player, (conditions) -> {
-			return conditions.matches(block);
-		});
+		this.trigger(player, (conditions) -> conditions.matches(block));
 	}
 	
 	public static class Conditions extends AbstractCriterionConditions {

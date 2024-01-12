@@ -156,7 +156,7 @@ public class Commands {
             String targets = EntityArgumentType.getPlayers(context, "targets").stream().map(player -> player.getDisplayName().getString()).reduce((a, b) -> a + ", " + b).orElse("null");
             return Map.of("targets", targets, "namespace", namespace, "path", path);
         } catch (Exception e) {
-            e.printStackTrace();
+            Revelationary.logError(e.toString());
         }
         return null;
     }
