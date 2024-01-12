@@ -9,12 +9,11 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -98,13 +97,10 @@ public interface RevelationAware {
 	 * @param context the ShapeContext to check
 	 */
 	default boolean isVisibleTo(ShapeContext context) {
-		if (context instanceof EntityShapeContext) {
-			Entity entity = ((EntityShapeContext) context).getEntity();
-			if (entity instanceof PlayerEntity) {
-				return this.isVisibleTo((PlayerEntity) entity);
-			}
+		if (context instanceof EntityShapeContext entityShapeContext && entityShapeContext.getEntity() instanceof PlayerEntity player) {
+			return this.isVisibleTo(player);
 		}
-		return true;
+		return false;
 	}
 	
 	/**
@@ -120,21 +116,16 @@ public interface RevelationAware {
 	/**
 	 * Helper method that returns the player in a lootContextBuilder
 	 *
-	 * @param lootContextBuilder The loot context builder to search a player in
+	 * @param lootContextBuilderSet The loot context builder set to search a player in
 	 * @return the player of that loot context builder. null if there is no player in that context
 	 */
 	@Nullable
-	static PlayerEntity getLootPlayerEntity(LootContext.@NotNull Builder lootContextBuilder) {
-		if (lootContextBuilder.getNullable(LootContextParameters.THIS_ENTITY) == null) {
-			return null;
-		} else {
-			Entity entity = lootContextBuilder.get(LootContextParameters.THIS_ENTITY);
-			if (entity instanceof PlayerEntity) {
-				return (PlayerEntity) entity;
-			} else {
-				return null;
-			}
+	static PlayerEntity getLootPlayerEntity(LootContextParameterSet.Builder lootContextBuilderSet) {
+		Entity entity = lootContextBuilderSet.getOptional(LootContextParameters.THIS_ENTITY);
+		if (entity instanceof PlayerEntity player) {
+			return player;
 		}
+		return null;
 	}
 	
 }

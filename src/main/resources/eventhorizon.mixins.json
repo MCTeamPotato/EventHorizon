@@ -8,7 +8,6 @@
   "mixins": [
     "AbstractBlockMixin",
     "BlockUnbreakingMixin",
-    "CriteriaAccessor",
     "PlayerAdvancementTrackerMixin"
   ],
   "client": [

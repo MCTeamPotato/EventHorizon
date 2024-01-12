@@ -2,8 +2,6 @@ package de.dafuqs.revelationary;
 
 import de.dafuqs.revelationary.api.advancements.ClientAdvancementPacketCallback;
 import de.dafuqs.revelationary.mixin.client.AccessorClientAdvancementManager;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.client.MinecraftClient;
@@ -21,7 +19,7 @@ import java.util.*;
 public class ClientAdvancements {
 	
 	protected static boolean receivedFirstAdvancementPacket = false;
-	public static List<ClientAdvancementPacketCallback> callbacks = new ObjectArrayList<>();
+	public static List<ClientAdvancementPacketCallback> callbacks = new ArrayList<>();
 	
 	public static void onClientPacket(@NotNull AdvancementUpdateS2CPacket packet) {
 		boolean hadPacketBefore = receivedFirstAdvancementPacket;
@@ -62,7 +60,7 @@ public class ClientAdvancements {
 	}
 	
 	public static @NotNull Set<Identifier> getDoneAdvancements(@NotNull AdvancementUpdateS2CPacket packet) {
-		Set<Identifier> doneAdvancements = new ObjectOpenHashSet<>();
+		Set<Identifier> doneAdvancements = new HashSet<>();
 		
 		for (Identifier earnedAdvancementIdentifier : packet.getAdvancementsToEarn().keySet()) {
 			if (ClientAdvancements.hasDone(earnedAdvancementIdentifier)) {

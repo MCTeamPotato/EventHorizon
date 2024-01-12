@@ -23,8 +23,6 @@ public class Revelationary {
     public static final String MOD_ID = "eventhorizon";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static boolean isRubidiumLoaded;
-
 
     public Revelationary() {
         AdvancementCriteria.register();
@@ -56,6 +54,7 @@ public class Revelationary {
         logInfo("Common startup completed!");
     }
 
+
     @SubscribeEvent
     public void onAddReloadListener(@NotNull AddReloadListenerEvent event) {
         event.addListener(RevelationDataLoader.INSTANCE);
@@ -68,11 +67,12 @@ public class Revelationary {
 
     @SubscribeEvent
     public void onCmdRegister(@NotNull RegisterCommandsEvent event) {
-        Commands.register(event.getDispatcher());
+        Commands.register(event.getDispatcher(), event.getBuildContext(), event.getCommandSelection());
     }
 
     @SubscribeEvent
     public void onPlayerLogIn(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayerEntity serverPlayerEntity) RevelationaryS2CPacketSenders.sendRevelations(serverPlayerEntity);
     }
+
 }

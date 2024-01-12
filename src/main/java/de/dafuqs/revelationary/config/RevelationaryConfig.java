@@ -3,13 +3,13 @@ package de.dafuqs.revelationary.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.dafuqs.revelationary.Revelationary;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.io.*;
 
 public class RevelationaryConfig {
 
-	private static final File CONFIG_FILE_PATH = new File(FMLPaths.CONFIGDIR.get().toFile(), "Revelationary.json");
+	private static final File CONFIG_FILE_PATH = new File(FMLLoader.getGamePath().resolve("config").toFile(), "Revelationary.json");
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	private static Config CONFIG = null;
 
@@ -28,7 +28,6 @@ public class RevelationaryConfig {
 
 		public Config() { }
 
-		@SuppressWarnings("ResultOfMethodCallIgnored")
 		private static Config load() {
 			if (!CONFIG_FILE_PATH.exists()) {
 				try {

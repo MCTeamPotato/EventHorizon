@@ -18,7 +18,6 @@ import java.util.Map;
 public class BlockModelsMixin {
 	
 	@Shadow
-	@Final
 	private Map<BlockState, BakedModel> models;
 	
 	@Shadow
@@ -31,7 +30,7 @@ public class BlockModelsMixin {
 			BlockState destinationBlockState = ClientRevelationHolder.getCloakTarget(blockState);
 			BakedModel overriddenModel = this.models.getOrDefault(destinationBlockState, modelManager.getMissingModel());
 			callbackInfoReturnable.setReturnValue(overriddenModel);
-			callbackInfoReturnable.cancel();
 		}
 	}
+	
 }

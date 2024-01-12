@@ -8,43 +8,40 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCriterion.Conditions> {
 	
 	public static final Identifier ID = new Identifier(Revelationary.MOD_ID, "had_revelation");
 	
-	@Contract("_ -> new")
-	public static HadRevelationCriterion.@NotNull Conditions create(Identifier id) {
-		return new HadRevelationCriterion.Conditions(EntityPredicate.Extended.EMPTY, id);
+	public static HadRevelationCriterion.Conditions create(Identifier id) {
+		return new HadRevelationCriterion.Conditions(LootContextPredicate.EMPTY, id);
 	}
 	
 	public Identifier getId() {
 		return ID;
 	}
 	
-	public HadRevelationCriterion.Conditions conditionsFromJson(JsonObject jsonObject, EntityPredicate.Extended extended, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
+	public HadRevelationCriterion.Conditions conditionsFromJson(JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
 		Identifier identifier = new Identifier(JsonHelper.getString(jsonObject, "revelation_identifier"));
-		return new HadRevelationCriterion.Conditions(extended, identifier);
+		return new HadRevelationCriterion.Conditions(lootContextPredicate, identifier);
 	}
 	
 	public void trigger(ServerPlayerEntity player, Block block) {
-		this.trigger(player, (conditions) -> conditions.matches(block));
+		this.trigger(player, (conditions) -> {
+			return conditions.matches(block);
+		});
 	}
 	
 	public static class Conditions extends AbstractCriterionConditions {
 		private final Identifier identifier;
 		
-		public Conditions(EntityPredicate.Extended player, Identifier identifier) {
-			super(ID, player);
+		public Conditions(LootContextPredicate lootContextPredicate, Identifier identifier) {
+			super(ID, lootContextPredicate);
 			this.identifier = identifier;
 		}
 		
@@ -59,12 +56,13 @@ public class HadRevelationCriterion extends AbstractCriterion<HadRevelationCrite
 				// if "revelation_identifier": "" => trigger with any revelation
 				return true;
 			} else if (object instanceof Block cloakableBlock) {
-				return Objects.equals(ForgeRegistries.BLOCKS.getKey(cloakableBlock), identifier);
+				return Registries.BLOCK.getId(cloakableBlock).equals(identifier);
 			} else if (object instanceof Item cloakableItem) {
-				return Objects.equals(ForgeRegistries.ITEMS.getKey(cloakableItem), identifier);
+				return Registries.ITEM.getId(cloakableItem).equals(identifier);
 			} else {
 				return false;
 			}
 		}
 	}
+	
 }

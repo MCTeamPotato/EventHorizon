@@ -7,7 +7,6 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +26,7 @@ public class ItemModelsMixin {
 	private BakedModelManager modelManager;
 	
 	@Inject(at = @At("HEAD"), method = "getModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/render/model/BakedModel;", cancellable = true)
-	private void revelationary$getModel(@NotNull ItemStack itemStack, CallbackInfoReturnable<BakedModel> callbackInfoReturnable) {
+	private void revelationary$getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callbackInfoReturnable) {
 		if (ClientRevelationHolder.isCloaked(itemStack.getItem())) {
 			Item destinationItem = ClientRevelationHolder.getCloakTarget(itemStack.getItem());
 			BakedModel overriddenModel = this.models.getOrDefault(Item.getRawId(destinationItem), modelManager.getMissingModel());

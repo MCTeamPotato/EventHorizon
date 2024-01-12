@@ -3,7 +3,7 @@ package de.dafuqs.revelationary.api.advancements;
 import de.dafuqs.revelationary.advancement_criteria.AdvancementCountCriterion;
 import de.dafuqs.revelationary.advancement_criteria.AdvancementGottenCriterion;
 import de.dafuqs.revelationary.advancement_criteria.HadRevelationCriterion;
-import de.dafuqs.revelationary.mixin.CriteriaAccessor;
+import net.minecraft.advancement.criterion.Criteria;
 
 public class AdvancementCriteria {
 	
@@ -22,8 +22,9 @@ public class AdvancementCriteria {
 	public static HadRevelationCriterion HAD_REVELATION;
 	
 	public static void register() {
-		ADVANCEMENT_GOTTEN = CriteriaAccessor.callRegister(new AdvancementGottenCriterion());
-		ADVANCEMENT_COUNT = CriteriaAccessor.callRegister(new AdvancementCountCriterion());
-		HAD_REVELATION = CriteriaAccessor.callRegister(new HadRevelationCriterion());
+		ADVANCEMENT_COUNT = Criteria.register(new AdvancementCountCriterion());
+		HAD_REVELATION = Criteria.register(new HadRevelationCriterion());
+		ADVANCEMENT_GOTTEN = Criteria.register(new AdvancementGottenCriterion());
 	}
+	
 }

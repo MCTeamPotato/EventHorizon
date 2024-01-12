@@ -7,6 +7,6 @@ package de.dafuqs.revelationary.api.revelations;
  */
 public interface WorldRendererAccessor {
 	
-	void revelationary$rebuildAllChunks();
+	void rebuildAllChunks();
 	
 }

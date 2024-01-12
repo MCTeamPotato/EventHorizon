@@ -20,4 +20,5 @@ public abstract class ItemMixin {
 			callbackInfoReturnable.setReturnValue(RevelationRegistry.getTranslationString(thisItem));
 		}
 	}
+	
 }
