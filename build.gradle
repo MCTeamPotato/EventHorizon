@@ -49,9 +49,6 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
-    modImplementation("maven.modrinth:potacore:0.1.1")
-    modImplementation("maven.modrinth:potacore:0.1.1:universal-sources")
-    modImplementation("maven.modrinth:potacore:0.1.1:universal-javadoc")
 }
 
 processResources {
